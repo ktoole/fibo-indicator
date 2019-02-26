@@ -51,11 +51,11 @@ class Fibo():
         """ Calculate the next uptrend """
         upTrendPercents = []
 
-        _38Percent = onlineNumbersList[0] + low
-        _50Percent = onlineNumbersList[1] + low
-        _62Percent = onlineNumbersList[2] + low
-        _127Percent = onlineNumbersList[3] + low
-        _162Percent = onlineNumbersList[4] + low
+        _38Percent = round((onlineNumbersList[0] + low), 1)
+        _50Percent = round((onlineNumbersList[1] + low), 1)
+        _62Percent = round((onlineNumbersList[2] + low), 1)
+        _127Percent = round((onlineNumbersList[3] + low), 1)
+        _162Percent = round((onlineNumbersList[4] + low), 1)
         upTrendPercents.extend([_38Percent, _50Percent, _62Percent, _127Percent, _162Percent])
         
         return upTrendPercents
@@ -65,11 +65,11 @@ class Fibo():
 
         downTrendPercents = []
 
-        _38Percent = high - onlineNumbersList[0]
-        _50Percent = high - onlineNumbersList[1]
-        _62Percent = high - onlineNumbersList[2]
-        _127Percent = high - onlineNumbersList[3]
-        _162Percent = high - onlineNumbersList[4]
+        _38Percent = round((high - onlineNumbersList[0]), 1)
+        _50Percent = round((high - onlineNumbersList[1]), 1)
+        _62Percent = round((high - onlineNumbersList[2]), 1)
+        _127Percent = round((high - onlineNumbersList[3]), 1)
+        _162Percent = round((high - onlineNumbersList[4]), 1)
 
         downTrendPercents.extend([_38Percent, _50Percent, _62Percent, _127Percent, _162Percent])
         return downTrendPercents
