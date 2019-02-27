@@ -10,8 +10,8 @@ import csv
 df = pd.read_csv('../Data/GCG20_Monthly.csv', engine='python', skipfooter=1)
 df['Date Time'] = pd.to_datetime(df['Date Time']) # Convert all dates to datetime objects
 
+
 """ Set up variables """
-numberOfCandlesToView = 200  # 220 -> month, 100 -> weekly, N/A -> daily  TODO: More testing needed for weekly and daily
 EMPTY = ""
 swingIsLowestLow = True
 running = True
@@ -24,6 +24,10 @@ letterIndex = 0
 numberIndex = 1
 fiboSummary = []
 trend = EMPTY
+MONTHLY = 260
+WEEKLY = 100
+DAILY = EMPTY
+numberOfCandlesToView = MONTHLY  #100 -> weekly, N/A -> daily  TODO: More testing needed for weekly and daily
 
 
 startIndex = 0
@@ -113,13 +117,21 @@ while(running):
 
 
 
+# Create name of file based on timeframe
+if (numberOfCandlesToView == MONTHLY):
+        csvName = 'monthly_results.csv'
+elif (numberOfCandlesToView == WEEKLY):
+        csvName = 'weekly_results.csv'
+elif (numberOfCandlesToView == DAILY):
+        csvName = 'daily_results.csv'
+
 # Write results to output file
-with open('fibo_results.csv', 'w') as csvFile:
+with open('../Output/' + csvName, 'w') as csvFile:
         columns = ['Name', 'Trend', 'Date of Low', 'Date of High', 'Low', 'High', '38%', '50%', '62%', '127%', '162%']
         writer = csv.DictWriter(csvFile, fieldnames=columns)
         writer.writeheader()
         writer.writerows(fiboSummary)
-print('Fibo results have been written to fibo_results.csv')
+print('Fibo results have been written to ' + csvName)
 
 csvFile.close()
 
