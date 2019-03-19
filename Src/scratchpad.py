@@ -1,12 +1,16 @@
 """ This file is for testing random ideas """
 
-import json
+test = ["apple", "bagel"]
 
-test = {
-    "apple": 0,
-    "orange": 2
-}
+myTest = "I am a cat"
+words = myTest.split()
 
 
-with open("test.json", "w") as write_file:
-        json.dump(test, write_file)
+
+
+word = "word-game"
+
+if "-" in word:
+    print(True)
+else:
+    print(False)

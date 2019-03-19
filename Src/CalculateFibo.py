@@ -22,7 +22,9 @@ trend = EMPTY
 tenYearsInWeeks = 521
 halfTheWindow = 2
 csvName = ""
-foundDuplicate = False
+isValidTrend = True
+previousHH = None
+previousLL = None
 
 """ Get Data """
 df = pd.read_csv('../Data/GCG19_Weekly.csv', engine='python', skipfooter=1)
@@ -59,6 +61,8 @@ while(running):
         if (( startIndex + numberOfCandlesToView) >= lastIndex):
 
                 numberOfCandlesToView = numberOfCandlesToView // halfTheWindow
+                endIndex = startIndex + numberOfCandlesToView
+
                 if (numberOfCandlesToView <= 1):
                         endIndex = lastIndex
 
@@ -82,6 +86,13 @@ while(running):
 
         if((len(rowOfLowestLow)>0) and (len(rowOfHighestHigh)>0)):
 
+                if ((rowOfHighestHigh['High'] == previousHH) and (rowOfLowestLow['Low'] == previousLL)):
+                        # It's a duplicate
+                        isValidTrend = False
+                elif(rowOfHighestHigh['Date Time'] == rowOfLowestLow['Date Time']):
+                        # They equal, meaning no real change in window
+                        isValidTrend = False
+
                 # Perform Fibo Calculations
                 fiboPoint = Fibo(rowOfHighestHigh['High'], rowOfLowestLow['Low'])
                 isTrendUp = fiboPoint.isTrendUp(rowOfHighestHigh, rowOfLowestLow)
@@ -99,6 +110,18 @@ while(running):
                         name = numberIndex
                         numberIndex += 1
 
+                print()
+                print("Start Index: ", startIndex)
+                print("End Index: ", endIndex)
+                print("Current Window Size: ", numberOfCandlesToView)
+                print("isTrendUp: ", isTrendUp)
+                print("Date of Low: ", rowOfLowestLow['Date Time'])
+                print("Low: ", rowOfLowestLow['Low'])
+                print("Date of High: ", rowOfHighestHigh['Date Time'])
+                print("High: ", rowOfHighestHigh['High'])
+                print()
+
+
                 fiboPoint.setName(name)
 
                 # Prepare Fibo info for CSV Storage
@@ -115,17 +138,12 @@ while(running):
                         "127%":fiboPercents[3],
                         "162%":fiboPercents[4]
                 }
-                # # Check for duplicate TODO:  FIX DUPLICATE ISSUE...DOUBLE CHECK TRENDS IN FILE AND DUPLICATE DATES AFTEWARD
-                # if (len(fiboSummary) >= 2):
-                #         currentFiboPair = fiboSummary[-1]
-                #         previousFiboPair = fiboSummary[-2]
-                #         if ((currentFiboPair.get("Low") == previousFiboPair.get("Low")) and (currentFiboPair.get("High") == previousFiboPair.get("High"))):
-                #                 foundDuplicate = True
-                #
-                # if (not foundDuplicate):
-                #         fiboSummary.append(fiboInfo)
-                #         foundDuplicate = False
+
+
                 fiboSummary.append(fiboInfo)
+
+                previousHH = fiboInfo["High"]
+                previousLL = fiboInfo["Low"]
 
                 # Clear values for next Fibo Pair
                 if(not swingIsLowestLow):
