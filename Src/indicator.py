@@ -32,9 +32,12 @@ df['Date Time'] = pd.to_datetime(df['Date Time']) # Convert all dates to datetim
 
 twentyOneYearsInMonths = 260
 fivePointFiveYearsInWeeks = 286
+oneYearInDaysExcludingSaturdays = 313
 DAILY = EMPTY
-numberOfCandlesToView = fivePointFiveYearsInWeeks  #100 -> weekly, N/A -> daily  TODO: More testing needed for weekly and daily
+numberOfCandlesToView = oneYearInDaysExcludingSaturdays  #100 -> weekly, N/A -> daily  TODO: More testing needed for daily
 
+#TODO: Monthly misses the 1920 fibo point
+#TODO: Weekly, consider having it stop earlier so as to avoid second to last trend having the same high and low
 
 startIndex = 0
 endIndex = startIndex + numberOfCandlesToView
@@ -63,7 +66,7 @@ while(running):
                 numberOfCandlesToView = numberOfCandlesToView // halfTheWindow
                 endIndex = startIndex + numberOfCandlesToView
 
-                if (numberOfCandlesToView <= 1):
+                if (numberOfCandlesToView <= 2):
                         endIndex = lastIndex
 
         else:
